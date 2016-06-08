@@ -16,14 +16,26 @@ public class ImageInsertSettingsPanel extends JPanel {
         initComponents();
     }
 
+    public JTextField getNameInput() {
+        return nameInput;
+    }
+
+    public JCheckBox getWhiteCheckbox() {
+        return whiteCheckbox;
+    }
+
+    public JCheckBox getRoundCheckbox() {
+        return roundCheckbox;
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner non-commercial license
         panel1 = new JPanel();
         label1 = new JLabel();
-        textField1 = new JTextField();
-        checkBox1 = new JCheckBox();
-        checkBox2 = new JCheckBox();
+        nameInput = new JTextField();
+        whiteCheckbox = new JCheckBox();
+        roundCheckbox = new JCheckBox();
         panel2 = new JPanel();
         label2 = new JLabel();
 
@@ -48,20 +60,20 @@ public class ImageInsertSettingsPanel extends JPanel {
             panel1.add(label1, new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
-            panel1.add(textField1, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+            panel1.add(nameInput, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
 
-            //---- checkBox1 ----
-            checkBox1.setText("Convert white to transparent");
-            checkBox1.setSelected(true);
-            panel1.add(checkBox1, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
+            //---- whiteCheckbox ----
+            whiteCheckbox.setText("Convert white to transparent");
+            whiteCheckbox.setSelected(true);
+            panel1.add(whiteCheckbox, new GridBagConstraints(0, 2, 2, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
 
-            //---- checkBox2 ----
-            checkBox2.setText("Round corners");
-            panel1.add(checkBox2, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
+            //---- roundCheckbox ----
+            roundCheckbox.setText("Round corners");
+            panel1.add(roundCheckbox, new GridBagConstraints(0, 4, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
         }
@@ -94,9 +106,9 @@ public class ImageInsertSettingsPanel extends JPanel {
     // Generated using JFormDesigner non-commercial license
     private JPanel panel1;
     private JLabel label1;
-    private JTextField textField1;
-    private JCheckBox checkBox1;
-    private JCheckBox checkBox2;
+    private JTextField nameInput;
+    private JCheckBox whiteCheckbox;
+    private JCheckBox roundCheckbox;
     private JPanel panel2;
     private JLabel label2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables

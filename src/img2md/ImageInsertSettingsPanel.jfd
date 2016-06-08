@@ -23,21 +23,30 @@ new FormModel {
 					"text": "File Name"
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) )
 				add( new FormComponent( "javax.swing.JTextField" ) {
-					name: "textField1"
+					name: "nameInput"
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "checkBox1"
+					name: "whiteCheckbox"
 					"text": "Convert white to transparent"
 					"selected": true
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridy": 2
 					"gridwidth": 2
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
-					name: "checkBox2"
+					name: "roundCheckbox"
 					"text": "Round corners"
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridy": 4
 				} )

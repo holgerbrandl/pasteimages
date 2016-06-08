@@ -6,24 +6,36 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.*;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 
 public class ImageUtils {
 
-    public static Image getImageFromClipboard() throws Exception {
+    public static Image getImageFromClipboard() {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
 
-        if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-            return (Image) transferable.getTransferData(DataFlavor.imageFlavor);
-        } else {
-            return null;
+        try {
+
+            if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+                return (Image) transferable.getTransferData(DataFlavor.imageFlavor);
+            } else {
+                return null;
+            }
+
+        } catch (UnsupportedFlavorException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
+
+        return null;
     }
 
 
