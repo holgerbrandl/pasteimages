@@ -31,7 +31,7 @@
     <action id="paste_image" class="img2md.PasteImageFromClipboard" text="PasteImageFromClipboard"
             description="Paste an image from clipboard into current cursor position">
       <add-to-group group-id="EditMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="shift ctrl V"/>
+      <keyboard-shortcut keymap="$default" first-keystroke="shift meta V"/>
     </action>
   </actions>
 

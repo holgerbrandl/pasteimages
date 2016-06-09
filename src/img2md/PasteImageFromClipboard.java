@@ -3,17 +3,15 @@ package img2md;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.AccessToken;
-import com.intellij.openapi.application.WriteAction;
 import com.intellij.openapi.command.WriteCommandAction;
+import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
-import com.intellij.openapi.fileEditor.FileEditor;
+import com.intellij.openapi.fileEditor.FileDocumentManager;
+import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.ui.DialogBuilder;
 import com.intellij.openapi.ui.DialogWrapper;
-import com.intellij.openapi.util.text.StringUtil;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -47,7 +45,7 @@ public class PasteImageFromClipboard extends AnAction {
 
         // add option to rescale image on the fly
 
-        ImageInsertSettingsPanel insertSettingsPanel = showDialog(imageFromClipboard);
+        ImageInsertSettingsPanel insertSettingsPanel = showDialog();
         if (insertSettingsPanel == null) {
             return;
         }
@@ -58,27 +56,39 @@ public class PasteImageFromClipboard extends AnAction {
 
 
         BufferedImage bufferedImage = toBufferedImage(imageFromClipboard);
-        if (whiteAsTransparent)
-            bufferedImage = toBufferedImage(whiteToTransparent(bufferedImage));
+//        if (whiteAsTransparent)
+//            bufferedImage = toBufferedImage(whiteToTransparent(bufferedImage));
 
-        if (roundCorners) {
-            bufferedImage = toBufferedImage(makeRoundedCorner(bufferedImage, 20));
-        }
+//        if (roundCorners) {
+//            bufferedImage = toBufferedImage(makeRoundedCorner(bufferedImage, 20));
+//        }
 
 
-        // deterimine save path
+
+
+        // deterimine save path for the image
         Editor ed = e.getData(PlatformDataKeys.EDITOR);
         if (ed == null) {
             return;
         }
 
 
-        String filePath = ed.getProject().getProjectFilePath();
+        // from http://stackoverflow.com/questions/17915688/intellij-plugin-get-code-from-current-open-file
+        Document currentDoc = FileEditorManager.getInstance(e.getProject()).getSelectedTextEditor().getDocument();
+        VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDoc);
+        File curDocument = new File(currentFile.getPath());
 
-        File imageFile = new File("sdf"); // make sure that this is relative
+        File imageDir = new File(curDocument.getParent(), "assets");
+        if(!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdir();
+
+        File imageFile = new File(imageDir,  imageName + ".png");
+
+        save(bufferedImage, imageFile, "png");
+
+
 
         // inject image element current markdown document
-        insertImageElement(ed, imageFile, e);
+        insertImageElement(ed, curDocument.getParentFile().toPath().relativize(imageFile.toPath()).toFile(), e);
 
 
 //            String text = ed.getSelectionModel().getSelectedText();
@@ -111,47 +121,12 @@ public class PasteImageFromClipboard extends AnAction {
         Runnable r = ()-> EditorModificationUtil.insertStringAtCaret(editor, "![]("+imageFile.toString()+")");
 
         WriteCommandAction.runWriteCommandAction(e.getProject(), r);
-
-
-//        PsiFile file = e.getData(PlatformDataKeys.PSI_FILE);
-//
-//        final AccessToken token = WriteAction.start();
-//        try {
-//            PsiElement elementAt = file.findElementAt(ed.getCaretModel().getOffset());
-//            elementAt.addAfter()
-//
-//
-//            PsiElement importStatement = RElementFactory.createFuncallFromText(project, "library(" + packageName + ");");
-//            if (insertAfter != null && insertAfter.getTextOffset() < element.getTextOffset()) {
-//                importStatement = insertAfter.getParent().addAfter(importStatement, insertAfter);
-//                insertAfter.getParent().addBefore(RElementFactory.createLeafFromText(project, "\n"), importStatement);
-//            } else {
-//                insertAfter = file.getFirstChild();
-//                importStatement = insertAfter.getParent().addBefore(importStatement, insertAfter);
-//                insertAfter.getParent().addAfter(RElementFactory.createLeafFromText(project, "\n"), importStatement);
-//            }
-//
-////        if (endsWithSemicolon(inserAfter)) {
-////            addedImport.addBefore(BnfElementFactory.createLeafFromText(project, ";"), null);
-////            if (inserAfter.getNextSibling() instanceof PsiWhiteSpace) {
-////                inserAfter.getParent().addAfter(BnfElementFactory.createLeafFromText(project, "\n"), addedImport);
-////            }
-////        }
-//            //            final FileEditor selectedEditor = FileEditorManager.getInstance(project).getSelectedEditor(insertAfter.getContainingFile().getVirtualFile());
-////            if (selectedEditor instanceof TextEditor) {
-////                final Editor ed = ((TextEditor) selectedEditor).getEditor();
-////                ed.getCaretModel().moveToOffset(addedRule.getTextRange().getEndOffset() - (BnfIntroduceRuleHandler.endsWithSemicolon(addedRule) ? 1 : 0));
-////                ed.getScrollingModel().scrollToCaret(ScrollType.MAKE_VISIBLE);
-////            }
-//        } finally {
-//            token.finish();
-//        }
     }
 
 
     // for more examples see
 //    http://www.programcreek.com/java-api-examples/index.php?api=com.intellij.openapi.ui.DialogWrapper
-    private static ImageInsertSettingsPanel showDialog(Image image) {
+    private static ImageInsertSettingsPanel showDialog() {
         DialogBuilder builder = new DialogBuilder();
         ImageInsertSettingsPanel contentPanel = new ImageInsertSettingsPanel();
         builder.setCenterPanel(contentPanel);
