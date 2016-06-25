@@ -4,9 +4,9 @@
 
 package img2md;
 
-import java.awt.*;
 import javax.swing.*;
-import javax.swing.border.*;
+import javax.swing.border.TitledBorder;
+import java.awt.*;
 
 /**
  * @author unknown
@@ -28,12 +28,18 @@ public class ImageInsertSettingsPanel extends JPanel {
         return roundCheckbox;
     }
 
+    public JTextField getDirectoryField() {
+        return directoryField;
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner non-commercial license
         panel1 = new JPanel();
         label1 = new JLabel();
         nameInput = new JTextField();
+        label3 = new JLabel();
+        directoryField = new JTextField();
         whiteCheckbox = new JCheckBox();
         roundCheckbox = new JCheckBox();
         panel2 = new JPanel();
@@ -61,6 +67,15 @@ public class ImageInsertSettingsPanel extends JPanel {
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
             panel1.add(nameInput, new GridBagConstraints(1, 0, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- label3 ----
+            label3.setText("Directory Name");
+            panel1.add(label3, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
+                GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                new Insets(0, 0, 0, 0), 0, 0));
+            panel1.add(directoryField, new GridBagConstraints(1, 1, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                 new Insets(0, 0, 0, 0), 0, 0));
 
@@ -104,6 +119,8 @@ public class ImageInsertSettingsPanel extends JPanel {
     private JPanel panel1;
     private JLabel label1;
     private JTextField nameInput;
+    private JLabel label3;
+    private JTextField directoryField;
     private JCheckBox whiteCheckbox;
     private JCheckBox roundCheckbox;
     private JPanel panel2;

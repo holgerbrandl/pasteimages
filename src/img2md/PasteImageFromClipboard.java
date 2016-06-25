@@ -1,5 +1,6 @@
 package img2md;
 
+import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -21,7 +22,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -56,9 +56,15 @@ public class PasteImageFromClipboard extends AnAction {
         }
 
 
+        // from http://stackoverflow.com/questions/17915688/intellij-plugin-get-code-from-current-open-file
+        Document currentDoc = FileEditorManager.getInstance(ed.getProject()).getSelectedTextEditor().getDocument();
+        VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDoc);
+        File curDocument = new File(currentFile.getPath());
+
+
         // add option to rescale image on the fly
 
-        ImageInsertSettingsPanel insertSettingsPanel = showDialog();
+        ImageInsertSettingsPanel insertSettingsPanel = showDialog(curDocument);
         if (insertSettingsPanel == null) {
             return;
         }
@@ -78,18 +84,21 @@ public class PasteImageFromClipboard extends AnAction {
         }
 
 
-        // from http://stackoverflow.com/questions/17915688/intellij-plugin-get-code-from-current-open-file
-        Document currentDoc = FileEditorManager.getInstance(ed.getProject()).getSelectedTextEditor().getDocument();
-        VirtualFile currentFile = FileDocumentManager.getInstance().getFile(currentDoc);
-        File curDocument = new File(currentFile.getPath());
-
         // make selectable
 //        File imageDir = new File(curDocument.getParent(), ".images");
-        File imageDir = new File(curDocument.getParent(), "."+ curDocument.getName().replace(".md", "").replace(".Rmd", "")+"_images");
+        String mdBaseName = curDocument.getName().replace(".md", "").replace(".Rmd", "");
 
-        if(!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdir();
+//        File imageDir = new File(curDocument.getParent(), "."+ mdBaseName +"_images");
+        String dirPattern = insertSettingsPanel.getDirectoryField().getText();
 
-        File imageFile = new File(imageDir,  imageName + ".png");
+
+        File imageDir = new File(curDocument.getParent(), dirPattern.replace("{md_base_name}", mdBaseName));
+
+
+        if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdir();
+
+
+        File imageFile = new File(imageDir, imageName + ".png");
 
         // todo should we silently override the image if it is already present?
         save(bufferedImage, imageFile, "png");
@@ -119,15 +128,19 @@ public class PasteImageFromClipboard extends AnAction {
         assert fileByPath != null;
 
         AbstractVcs usedVcs = ProjectLevelVcsManager.getInstance(ed.getProject()).getVcsFor(fileByPath);
-        if(usedVcs!=null && usedVcs.getCheckinEnvironment()!=null) {
+        if (usedVcs != null && usedVcs.getCheckinEnvironment() != null) {
             usedVcs.getCheckinEnvironment().scheduleUnversionedFilesForAddition(Collections.singletonList(fileByPath));
         }
 
+
+        // update directory pattern preferences for file and globally
+        PropertiesComponent.getInstance().setValue("PI__LAST_DIR_PATTERN", dirPattern);
+        PropertiesComponent.getInstance().setValue("PI__DIR_PATTERN_FOR_" + currentFile.getPath(), dirPattern);
     }
 
 
     private void insertImageElement(final @NotNull Editor editor, File imageFile) {
-        Runnable r = ()-> EditorModificationUtil.insertStringAtCaret(editor, "![]("+imageFile.toString()+")");
+        Runnable r = () -> EditorModificationUtil.insertStringAtCaret(editor, "![](" + imageFile.toString() + ")");
 
         WriteCommandAction.runWriteCommandAction(editor.getProject(), r);
     }
@@ -135,10 +148,22 @@ public class PasteImageFromClipboard extends AnAction {
 
     // for more examples see
 //    http://www.programcreek.com/java-api-examples/index.php?api=com.intellij.openapi.ui.DialogWrapper
-    private static ImageInsertSettingsPanel showDialog() {
+    private static ImageInsertSettingsPanel showDialog(File curDocument) {
         DialogBuilder builder = new DialogBuilder();
         ImageInsertSettingsPanel contentPanel = new ImageInsertSettingsPanel();
-        contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0,8));
+
+        // restore directory pattern preferences for file and globally
+
+        PropertiesComponent propComp = PropertiesComponent.getInstance();
+        String dirPattern = propComp.getValue("PI__DIR_PATTERN_FOR_" + curDocument.getPath());
+        if (dirPattern == null) dirPattern = propComp.getValue("PI__LAST_DIR_PATTERN");
+        if (dirPattern == null) dirPattern = ".{md_base_name}_images";
+
+
+        contentPanel.getDirectoryField().setText(dirPattern);
+
+
+        contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0, 8));
         builder.setCenterPanel(contentPanel);
         builder.setDimensionServiceKey("GrepConsoleSound");
         builder.setTitle("Paste Image Settings");
