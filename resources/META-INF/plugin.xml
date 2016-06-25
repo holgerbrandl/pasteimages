@@ -28,7 +28,7 @@
   </extensions>
 
   <actions>
-    <action id="paste_image" class="img2md.PasteImageFromClipboard" text="PasteImageFromClipboard"
+    <action id="paste_image" class="img2md.PasteImageFromClipboard" text="Paste Image into Markdown"
             description="Paste an image from clipboard into current cursor position">
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift meta V"/>

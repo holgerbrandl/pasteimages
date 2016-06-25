@@ -8,3 +8,14 @@ Paste Image To Markdown
 ## Installation
 
 Use the plugin browser in Intellij to download the plugin.
+
+## Usage
+
+1) Copy an image to your clipboard. E.g by right-click + copy in your favorite browser or by doing `Command-Control-Shift-4` on a mac or `PrtScn` on [windows10](http://www.howtogeek.com/226280/how-to-take-screenshots-in-windows-10/)
+
+2) Press `shift-ctrl-V` (or change the keybinding under `Preferences->Keymap->"Paste Image into Markdown")
+    ![](docs/images/paste_image_settings.png)
+
+    * optionally adjust file name (which defaults to a random value)
+3) The plugin will depsosit the file relative to your source-directory and insert the markdown image element at the current cursor position:
+    ![](docs/images/paste_result.jpg)
