@@ -9,6 +9,8 @@ Paste Image To Markdown
 
 Use the plugin browser in Intellij to download the plugin.
 
+It works best as extension to the [official Markdown support](https://plugins.jetbrains.com/plugin/7793) extension provided by Jetbrains.
+
 ## Usage
 
 1) Copy an image to your clipboard. E.g by right-click + copy in your favorite browser or by doing `Command-Control-Shift-4` on a mac or `PrtScn` on [windows10](http://www.howtogeek.com/226280/how-to-take-screenshots-in-windows-10/)

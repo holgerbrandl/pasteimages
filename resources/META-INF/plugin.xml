@@ -1,11 +1,11 @@
 <idea-plugin version="2">
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Image to Markdown</name>
+  <id>com.github.holgerbrandl.pasteimages/</id>
+  <name>Paste Images into Markdown</name>
   <version>1.0</version>
-  <vendor email="holgerbrandl@gmail.com" url="https://github.com/holgerbrandl/"></vendor>
+  <vendor email="holgerbrandl@gmail.com" url="https://github.com/holgerbrandl/pasteimages"/>
 
   <description><![CDATA[
-      Paste images into Markdown Documents directly from clipboard<br>
+      Paste images into MarkDown documents directly from clipboard<br>
       Images files are deposited in a configurable directory relative to the markdown document.
     ]]></description>
 
@@ -17,19 +17,13 @@
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="141.0"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
-  <!-- uncomment to enable plugin in all products
-  <depends>com.intellij.modules.lang</depends>
-  -->
-
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
   </extensions>
 
   <actions>
     <action id="paste_image" class="img2md.PasteImageFromClipboard" text="Paste Image into Markdown"
-            description="Paste an image from clipboard into current cursor position">
+            description="Paste an image from clipboard at the current cursor position">
       <add-to-group group-id="EditMenu" anchor="last"/>
       <keyboard-shortcut keymap="$default" first-keystroke="shift meta V"/>
     </action>
