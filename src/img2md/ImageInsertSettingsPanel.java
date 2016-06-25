@@ -56,7 +56,7 @@ public class ImageInsertSettingsPanel extends JPanel {
         {
             panel1.setBorder(new TitledBorder("Image Properties"));
             panel1.setLayout(new GridBagLayout());
-            ((GridBagLayout)panel1.getLayout()).columnWidths = new int[] {0, 2, 0};
+            ((GridBagLayout) panel1.getLayout()).columnWidths = new int[]{0, 150, 0};
             ((GridBagLayout)panel1.getLayout()).rowHeights = new int[] {0, 5, 0, 5, 0, 0};
             ((GridBagLayout)panel1.getLayout()).columnWeights = new double[] {0.0, 1.0, 1.0E-4};
             ((GridBagLayout)panel1.getLayout()).rowWeights = new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 1.0E-4};
