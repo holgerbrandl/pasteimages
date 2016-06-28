@@ -29,6 +29,10 @@ import static img2md.ImageUtils.*;
 
 public class PasteImageFromClipboard extends AnAction {
 
+
+    private static final String DOC_BASE_NAME = "{document_name}";
+
+
     @Override
     public void actionPerformed(AnActionEvent e) {
         Image imageFromClipboard = getImageFromClipboard();
@@ -92,7 +96,7 @@ public class PasteImageFromClipboard extends AnAction {
         String dirPattern = insertSettingsPanel.getDirectoryField().getText();
 
 
-        File imageDir = new File(curDocument.getParent(), dirPattern.replace("{md_base_name}", mdBaseName));
+        File imageDir = new File(curDocument.getParent(), dirPattern.replace(DOC_BASE_NAME, mdBaseName));
 
 
         if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdir();
@@ -157,7 +161,7 @@ public class PasteImageFromClipboard extends AnAction {
         PropertiesComponent propComp = PropertiesComponent.getInstance();
         String dirPattern = propComp.getValue("PI__DIR_PATTERN_FOR_" + curDocument.getPath());
         if (dirPattern == null) dirPattern = propComp.getValue("PI__LAST_DIR_PATTERN");
-        if (dirPattern == null) dirPattern = ".{md_base_name}_images";
+        if (dirPattern == null) dirPattern = "." + DOC_BASE_NAME + "_images";
 
 
         contentPanel.getDirectoryField().setText(dirPattern);
