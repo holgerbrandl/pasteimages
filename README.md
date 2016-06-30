@@ -20,7 +20,7 @@ It works best as extension to the [official Markdown support](https://plugins.je
 
 * optionally adjust file name (which defaults to a random value)
 
-3) The plugin will depsosit the file relative to your source-directory and insert the markdown image element at the current cursor position:
+3) The plugin will deposit the file relative to your source-directory and insert the markdown image element at the current cursor position:
     ![](docs/images/paste_result.jpg)
 
 
