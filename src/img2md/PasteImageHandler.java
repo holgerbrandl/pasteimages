@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 
 public class PasteImageHandler extends EditorActionHandler {
-    private static final Logger LOG = Logger.getInstance("#com.intellij.codeInsight.editorActions.PasteHandler");
+    private static final Logger LOG = Logger.getInstance("img2md.PasteHandler");
     private final EditorActionHandler myOriginalHandler;
 
     public PasteImageHandler(EditorActionHandler originalAction) {
