@@ -19,6 +19,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <!-- Add your extensions here -->
+    <editorActionHandler action="EditorPaste" implementationClass="img2md.PasteImageHandler" order="first" />
   </extensions>
 
   <actions>
