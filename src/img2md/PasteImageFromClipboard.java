@@ -19,6 +19,8 @@ import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -67,18 +69,21 @@ public class PasteImageFromClipboard extends AnAction {
 
 
         // add option to rescale image on the fly
+        BufferedImage bufferedImage = toBufferedImage(imageFromClipboard);
 
-        ImageInsertSettingsPanel insertSettingsPanel = showDialog(curDocument);
-        if (insertSettingsPanel == null) {
-            return;
-        }
+        if (bufferedImage == null) return;
+
+        Dimension dimension = new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight());
+        ImageInsertSettingsPanel insertSettingsPanel = showDialog(curDocument, dimension);
+
+        if (insertSettingsPanel == null) return;
 
         String imageName = insertSettingsPanel.getNameInput().getText();
         boolean whiteAsTransparent = insertSettingsPanel.getWhiteCheckbox().isSelected();
         boolean roundCorners = insertSettingsPanel.getRoundCheckbox().isSelected();
+        double scalingFactor = ((Integer) insertSettingsPanel.getScaleSpinner().getValue()) * 0.01;
 
 
-        BufferedImage bufferedImage = toBufferedImage(imageFromClipboard);
         if (whiteAsTransparent) {
             bufferedImage = toBufferedImage(whiteToTransparent(bufferedImage));
         }
@@ -87,6 +92,11 @@ public class PasteImageFromClipboard extends AnAction {
             bufferedImage = toBufferedImage(makeRoundedCorner(bufferedImage, 20));
         }
 
+        if (scalingFactor != 1) {
+            bufferedImage = scaleImage(bufferedImage,
+                    (int) Math.round(bufferedImage.getWidth() * scalingFactor),
+                    (int) Math.round(bufferedImage.getHeight() * scalingFactor));
+        }
 
         // make selectable
 //        File imageDir = new File(curDocument.getParent(), ".images");
@@ -152,9 +162,32 @@ public class PasteImageFromClipboard extends AnAction {
 
     // for more examples see
 //    http://www.programcreek.com/java-api-examples/index.php?api=com.intellij.openapi.ui.DialogWrapper
-    private static ImageInsertSettingsPanel showDialog(File curDocument) {
+    private static ImageInsertSettingsPanel showDialog(File curDocument, Dimension imgDim) {
         DialogBuilder builder = new DialogBuilder();
         ImageInsertSettingsPanel contentPanel = new ImageInsertSettingsPanel();
+
+
+        ChangeListener listener = new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                double scalingFactor = (Integer) contentPanel.getScaleSpinner().getValue() * 0.1;
+
+                JLabel targetSizeLabel = contentPanel.getTargetSizeLabel();
+
+                if (scalingFactor == 100) {
+                    targetSizeLabel.setText(imgDim.getWidth() + " x " + imgDim.getHeight());
+
+                } else {
+                    long newWidth = Math.round(imgDim.getWidth() * scalingFactor);
+                    long newHeight = Math.round(imgDim.getHeight() * scalingFactor);
+
+                    targetSizeLabel.setText(newWidth + " x " + newHeight);
+                }
+            }
+        };
+
+        listener.stateChanged(null);
+        contentPanel.getScaleSpinner().addChangeListener(listener);
 
         // restore directory pattern preferences for file and globally
 

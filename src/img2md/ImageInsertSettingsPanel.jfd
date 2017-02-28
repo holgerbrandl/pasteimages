@@ -1,23 +1,23 @@
-JFDML JFormDesigner: "5.2.3.0.281" Java: "1.8.0_76-release" encoding: "UTF-8"
+JFDML JFormDesigner: "6.0.0.0.84" Java: "1.8.0_112-release" encoding: "UTF-8"
 
 new FormModel {
 	contentType: "form/swing"
 	root: new FormRoot {
 		add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
 			"$columnSpecs": "0:1.0"
-			"$rowSpecs": "center:5, center:0, center:5"
+			"$rowSpecs": "center:5, center:0, center:5, 0"
 			"$alignTop": true
 			"$alignLeft": true
 		} ) {
 			name: "this"
 			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
-				"$columnSpecs": "0, 150:1.0"
-				"$rowSpecs": "center:0, center:5, center:0, center:5, center:0"
+				"$columnSpecs": "0, 150, 0:1.0"
+				"$rowSpecs": "center:0, center:5, center:5"
 				"$alignTop": true
 				"$alignLeft": true
 			} ) {
 				name: "panel1"
-				"border": new javax.swing.border.TitledBorder( "Image Properties" )
+				"border": new javax.swing.border.TitledBorder( "File Properties" )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label1"
 					"text": "File Name"
@@ -29,6 +29,7 @@ new FormModel {
 					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
+					"gridwidth": 2
 				} )
 				add( new FormComponent( "javax.swing.JLabel" ) {
 					name: "label3"
@@ -44,7 +45,21 @@ new FormModel {
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
 					"gridx": 1
 					"gridy": 1
+					"gridwidth": 2
 				} )
+			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+				"gridy": 1
+			} )
+			add( new FormContainer( "javax.swing.JPanel", new FormLayoutManager( class java.awt.GridBagLayout ) {
+				"$columnSpecs": "0:1.0, 0:1.0, 0:1.0, 0"
+				"$rowSpecs": "0, 0, 0"
+				"$hGap": 5
+				"$vGap": 5
+				"$alignLeft": true
+				"$alignTop": true
+			} ) {
+				name: "panel4"
+				"border": new javax.swing.border.TitledBorder( "Image Properties" )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
 					name: "whiteCheckbox"
 					"text": "Convert white to transparent"
@@ -53,7 +68,6 @@ new FormModel {
 						"JavaCodeGenerator.variableGetter": true
 					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 2
 					"gridwidth": 2
 				} )
 				add( new FormComponent( "javax.swing.JCheckBox" ) {
@@ -63,10 +77,43 @@ new FormModel {
 						"JavaCodeGenerator.variableGetter": true
 					}
 				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-					"gridy": 4
+					"gridy": 1
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label4"
+					"text": "Rescale Image"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridy": 2
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "targetSizeLabel"
+					"text": "text"
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 1
+					"gridy": 2
+				} )
+				add( new FormComponent( "javax.swing.JSpinner" ) {
+					name: "scaleSpinner"
+					"model": new javax.swing.SpinnerNumberModel( 100, 5, 200, 5 )
+					auxiliary() {
+						"JavaCodeGenerator.variableGetter": true
+					}
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 2
+					"gridy": 2
+				} )
+				add( new FormComponent( "javax.swing.JLabel" ) {
+					name: "label6"
+					"text": "%"
+				}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
+					"gridx": 3
+					"gridy": 2
 				} )
 			}, new FormLayoutConstraints( class com.jformdesigner.runtime.GridBagConstraintsEx ) {
-				"gridy": 1
+				"gridy": 3
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
