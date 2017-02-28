@@ -10,7 +10,11 @@
     ]]></description>
 
   <change-notes><![CDATA[
-      Initial release
+    New Features:
+    <ul>
+      <li>Paste handler to use default ctrl-v to paste clipboard images</li>
+      <li>Added optional rescaling of pasted images scaleImage</li>
+    </ul>
     ]]>
   </change-notes>
 
@@ -22,12 +26,12 @@
     <editorActionHandler action="EditorPaste" implementationClass="img2md.PasteImageHandler" order="first" />
   </extensions>
 
-  <actions>
-    <action id="paste_image" class="img2md.PasteImageFromClipboard" text="Paste Image into Markdown"
-            description="Paste an image from clipboard at the current cursor position">
-      <add-to-group group-id="EditMenu" anchor="last"/>
-      <keyboard-shortcut keymap="$default" first-keystroke="shift meta V"/>
-    </action>
-  </actions>
+  <!--<actions>-->
+  <!--<action id="paste_image" class="img2md.PasteImageFromClipboard" text="Paste Image into Markdown"-->
+  <!--description="Paste an image from clipboard at the current cursor position">-->
+  <!--<add-to-group group-id="EditMenu" anchor="last"/>-->
+  <!--<keyboard-shortcut keymap="$default" first-keystroke="shift meta V"/>-->
+  <!--</action>-->
+  <!--</actions>-->
 
 </idea-plugin>
