@@ -32,6 +32,8 @@ import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
 import com.intellij.openapi.editor.ex.EditorEx;
+import com.intellij.openapi.fileTypes.FileType;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -51,14 +53,20 @@ public class PasteImageHandler extends EditorActionHandler {
 
     @Override
     public void doExecute(final Editor editor, Caret caret, final DataContext dataContext) {
-        if (editor instanceof EditorEx && ((EditorEx) editor).getVirtualFile().getFileType().getName().equals("Markdown")) {
-            Image imageFromClipboard = ImageUtils.getImageFromClipboard();
-            if (imageFromClipboard != null) {
-                assert caret == null : "Invocation of 'paste' operation for specific caret is not supported";
-                PasteImageFromClipboard action = new PasteImageFromClipboard();
-                AnActionEvent event = createAnEvent(action, dataContext);
-                action.actionPerformed(event);
-                return;
+        if (editor instanceof EditorEx) {
+            VirtualFile virtualFile = ((EditorEx) editor).getVirtualFile();
+            if (virtualFile != null) {
+                FileType fileType = virtualFile.getFileType();
+                if ("Markdown".equals(fileType.getName())) {
+                    Image imageFromClipboard = ImageUtils.getImageFromClipboard();
+                    if (imageFromClipboard != null) {
+                        assert caret == null : "Invocation of 'paste' operation for specific caret is not supported";
+                        PasteImageFromClipboard action = new PasteImageFromClipboard();
+                        AnActionEvent event = createAnEvent(action, dataContext);
+                        action.actionPerformed(event);
+                        return;
+                    }
+                }
             }
         }
 
