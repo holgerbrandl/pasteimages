@@ -16,9 +16,11 @@ public class ImageInsertSettingsPanel extends JPanel {
         initComponents();
     }
 
+
     public JCheckBox getWhiteCheckbox() {
         return whiteCheckbox;
     }
+
 
     public JCheckBox getRoundCheckbox() {
         return roundCheckbox;
@@ -39,9 +41,11 @@ public class ImageInsertSettingsPanel extends JPanel {
         return nameInput;
     }
 
+
     public JTextField getDirectoryField() {
         return directoryField;
     }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -63,9 +67,9 @@ public class ImageInsertSettingsPanel extends JPanel {
 
         //======== this ========
         setLayout(new GridBagLayout());
-        ((GridBagLayout)getLayout()).columnWidths = new int[] {0, 0};
+        ((GridBagLayout) getLayout()).columnWidths = new int[]{0, 0};
         ((GridBagLayout) getLayout()).rowHeights = new int[]{5, 0, 5, 0, 0};
-        ((GridBagLayout)getLayout()).columnWeights = new double[] {1.0, 1.0E-4};
+        ((GridBagLayout) getLayout()).columnWeights = new double[]{1.0, 1.0E-4};
         ((GridBagLayout) getLayout()).rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
         //======== panel1 ========
@@ -147,25 +151,26 @@ public class ImageInsertSettingsPanel extends JPanel {
         }
         add(panel4, new GridBagConstraints(0, 3, 1, 1, 0.0, 0.0,
                 GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-            new Insets(0, 0, 0, 0), 0, 0));
+                new Insets(0, 0, 0, 0), 0, 0));
 
         //======== panel2 ========
         {
             panel2.setBorder(new TitledBorder("Markdown Properties"));
             panel2.setLayout(new GridBagLayout());
-            ((GridBagLayout)panel2.getLayout()).columnWidths = new int[] {0, 0, 0};
-            ((GridBagLayout)panel2.getLayout()).rowHeights = new int[] {0, 0};
-            ((GridBagLayout)panel2.getLayout()).columnWeights = new double[] {0.0, 1.0, 1.0E-4};
-            ((GridBagLayout)panel2.getLayout()).rowWeights = new double[] {0.0, 1.0E-4};
+            ((GridBagLayout) panel2.getLayout()).columnWidths = new int[]{0, 0, 0};
+            ((GridBagLayout) panel2.getLayout()).rowHeights = new int[]{0, 0};
+            ((GridBagLayout) panel2.getLayout()).columnWeights = new double[]{0.0, 1.0, 1.0E-4};
+            ((GridBagLayout) panel2.getLayout()).rowWeights = new double[]{0.0, 1.0E-4};
 
             //---- label2 ----
             label2.setText("None yet.");
             panel2.add(label2, new GridBagConstraints(0, 0, 2, 1, 0.0, 0.0,
-                GridBagConstraints.CENTER, GridBagConstraints.BOTH,
-                new Insets(0, 0, 0, 0), 0, 0));
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
         }
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
+
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner non-commercial license
