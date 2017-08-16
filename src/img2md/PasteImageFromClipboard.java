@@ -109,7 +109,7 @@ public class PasteImageFromClipboard extends AnAction {
         File imageDir = new File(curDocument.getParent(), dirPattern.replace(DOC_BASE_NAME, mdBaseName));
 
 
-        if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdir();
+        if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdirs();
 
 
         File imageFile = new File(imageDir, imageName + ".png");
