@@ -31,28 +31,41 @@ import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.editor.Caret;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.actionSystem.EditorActionHandler;
+import com.intellij.openapi.editor.actionSystem.EditorTextInsertHandler;
 import com.intellij.openapi.editor.ex.EditorEx;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.util.Producer;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
+import java.awt.datatransfer.Transferable;
 
-public class PasteImageHandler extends EditorActionHandler {
+public class PasteImageHandler extends EditorActionHandler implements EditorTextInsertHandler {
     private static final Logger LOG = Logger.getInstance("img2md.PasteHandler");
     private final EditorActionHandler myOriginalHandler;
+
 
     public PasteImageHandler(EditorActionHandler originalAction) {
         myOriginalHandler = originalAction;
     }
+
 
     private AnActionEvent createAnEvent(AnAction action, @NotNull DataContext context) {
         Presentation presentation = action.getTemplatePresentation().clone();
         return new AnActionEvent(null, context, ActionPlaces.UNKNOWN, presentation, ActionManager.getInstance(), 0);
     }
 
+
     @Override
-    public void doExecute(final Editor editor, Caret caret, final DataContext dataContext) {
+    public void execute(Editor editor, DataContext dataContext, Producer<Transferable> producer) {
+        Caret caret = editor.getCaretModel().getPrimaryCaret();
+        doExecute(editor, caret, dataContext);
+    }
+
+
+    @Override
+    public void doExecute(@NotNull final Editor editor, Caret caret, final DataContext dataContext) {
         if (editor instanceof EditorEx) {
             VirtualFile virtualFile = ((EditorEx) editor).getVirtualFile();
             if (virtualFile != null) {
