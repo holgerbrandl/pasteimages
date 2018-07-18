@@ -150,6 +150,10 @@ public class PasteImageFromClipboard extends AnAction {
         // update directory pattern preferences for file and globally
         PropertiesComponent.getInstance().setValue("PI__LAST_DIR_PATTERN", dirPattern);
         PropertiesComponent.getInstance().setValue("PI__DIR_PATTERN_FOR_" + currentFile.getPath(), dirPattern);
+
+        PropertiesComponent.getInstance().setValue("PI__IMG_CONVERT_WHITE", Boolean.toString(whiteAsTransparent));
+        PropertiesComponent.getInstance().setValue("PI__IMG_ROUND_CORNERS", Boolean.toString(roundCorners));
+        PropertiesComponent.getInstance().setValue("PI__IMG_SCALE", Integer.toString((Integer) insertSettingsPanel.getScaleSpinner().getValue()));
     }
 
 
@@ -190,7 +194,6 @@ public class PasteImageFromClipboard extends AnAction {
         contentPanel.getScaleSpinner().addChangeListener(listener);
 
         // restore directory pattern preferences for file and globally
-
         PropertiesComponent propComp = PropertiesComponent.getInstance();
         String dirPattern = propComp.getValue("PI__DIR_PATTERN_FOR_" + curDocument.getPath());
         if (dirPattern == null) dirPattern = propComp.getValue("PI__LAST_DIR_PATTERN");
@@ -201,6 +204,25 @@ public class PasteImageFromClipboard extends AnAction {
 
 
         contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0, 8));
+
+        //  Load and set last used Image Properties
+        String whiteAsTransparentStr = propComp.getValue("PI__IMG_CONVERT_WHITE");
+        if (whiteAsTransparentStr == null) whiteAsTransparentStr = "True";
+        boolean whiteAsTransparent = Boolean.parseBoolean(whiteAsTransparentStr);
+
+
+        String roundCornersStr = propComp.getValue("PI__IMG_ROUND_CORNERS");
+        if (roundCornersStr == null) roundCornersStr = "True";
+        boolean roundCorners = Boolean.parseBoolean(roundCornersStr);
+
+        String scalingFactorStr = propComp.getValue("PI__IMG_SCALE");
+        if (scalingFactorStr == null) scalingFactorStr = "100";
+        Integer scalingFactor = Integer.parseInt(scalingFactorStr);
+
+        contentPanel.getScaleSpinner().setValue(scalingFactor);
+        contentPanel.getWhiteCheckbox().setSelected(whiteAsTransparent);
+        contentPanel.getRoundCheckbox().setSelected(roundCorners);
+
         builder.setCenterPanel(contentPanel);
         builder.setDimensionServiceKey("GrepConsoleSound");
         builder.setTitle("Paste Image Settings");
