@@ -46,6 +46,10 @@ public class ImageInsertSettingsPanel extends JPanel {
         return directoryField;
     }
 
+    public JComboBox<String> getFormatBox() {
+        return formatBox;
+    }
+
 
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
@@ -55,6 +59,8 @@ public class ImageInsertSettingsPanel extends JPanel {
         nameInput = new JTextField();
         label3 = new JLabel();
         directoryField = new JTextField();
+        label5 = new JLabel();
+        formatBox = new JComboBox<>();
         panel4 = new JPanel();
         whiteCheckbox = new JCheckBox();
         roundCheckbox = new JCheckBox();
@@ -77,9 +83,9 @@ public class ImageInsertSettingsPanel extends JPanel {
             panel1.setBorder(new TitledBorder("File Properties"));
             panel1.setLayout(new GridBagLayout());
             ((GridBagLayout) panel1.getLayout()).columnWidths = new int[]{0, 150, 0, 0};
-            ((GridBagLayout) panel1.getLayout()).rowHeights = new int[]{0, 5, 5, 0};
+            ((GridBagLayout) panel1.getLayout()).rowHeights = new int[]{0, 5, 0, 5, 0};
             ((GridBagLayout) panel1.getLayout()).columnWeights = new double[]{0.0, 0.0, 1.0, 1.0E-4};
-            ((GridBagLayout) panel1.getLayout()).rowWeights = new double[]{0.0, 0.0, 0.0, 1.0E-4};
+            ((GridBagLayout) panel1.getLayout()).rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0E-4};
 
             //---- label1 ----
             label1.setText("File Name");
@@ -97,6 +103,21 @@ public class ImageInsertSettingsPanel extends JPanel {
                     new Insets(0, 0, 0, 0), 0, 0));
             panel1.add(directoryField, new GridBagConstraints(1, 1, 2, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
+                    new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- label5 ----
+            label5.setText("Format");
+            panel1.add(label5, new GridBagConstraints(0, 2, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
+                    new Insets(0, 0, 0, 0), 0, 0));
+
+            //---- formatBox ----
+            formatBox.setModel(new DefaultComboBoxModel<>(new String[]{
+                    "PNG",
+                    "JPEG"
+            }));
+            panel1.add(formatBox, new GridBagConstraints(2, 2, 1, 1, 0.0, 0.0,
+                    GridBagConstraints.CENTER, GridBagConstraints.BOTH,
                     new Insets(0, 0, 0, 0), 0, 0));
         }
         add(panel1, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
@@ -179,6 +200,8 @@ public class ImageInsertSettingsPanel extends JPanel {
     private JTextField nameInput;
     private JLabel label3;
     private JTextField directoryField;
+    private JLabel label5;
+    private JComboBox<String> formatBox;
     private JPanel panel4;
     private JCheckBox whiteCheckbox;
     private JCheckBox roundCheckbox;

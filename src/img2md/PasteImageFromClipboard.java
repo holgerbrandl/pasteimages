@@ -104,6 +104,7 @@ public class PasteImageFromClipboard extends AnAction {
 
 //        File imageDir = new File(curDocument.getParent(), "."+ mdBaseName +"_images");
         String dirPattern = insertSettingsPanel.getDirectoryField().getText();
+        String format = insertSettingsPanel.getFormatBox().getSelectedItem().toString().toLowerCase();
 
 
         File imageDir = new File(curDocument.getParent(), dirPattern.replace(DOC_BASE_NAME, mdBaseName));
@@ -112,10 +113,10 @@ public class PasteImageFromClipboard extends AnAction {
         if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdirs();
 
 
-        File imageFile = new File(imageDir, imageName + ".png");
+        File imageFile = new File(imageDir, imageName + "." + format);
 
         // todo should we silently override the image if it is already present?
-        save(bufferedImage, imageFile, "png");
+        save(bufferedImage, imageFile, format);
 
 //        PropertiesComponent.getInstance()
 
