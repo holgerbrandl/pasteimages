@@ -155,7 +155,8 @@ public class PasteImageFromClipboard extends AnAction {
 
 
     private void insertImageElement(final @NotNull Editor editor, File imageFile) {
-        Runnable r = () -> EditorModificationUtil.insertStringAtCaret(editor, "![](" + imageFile.toString() + ")");
+        String relImagePath = imageFile.toString().replace('\\', '/');
+        Runnable r = () -> EditorModificationUtil.insertStringAtCaret(editor, "![](" + relImagePath + ")");
 
         WriteCommandAction.runWriteCommandAction(editor.getProject(), r);
     }
