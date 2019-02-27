@@ -22,8 +22,11 @@ public class ImageUtils {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
 
         try {
+            if(transferable == null || transferable.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor())) {
+                return null;
+            }
 
-            if (transferable != null && transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
+            if (transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
                 return (Image) transferable.getTransferData(DataFlavor.imageFlavor);
             } else {
                 return null;
