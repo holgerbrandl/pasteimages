@@ -7,7 +7,9 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/resources" type="java-resource" />
     </content>
-    <orderEntry type="jdk" jdkName="IntelliJ IDEA IU-183.5153.38" jdkType="IDEA JDK" />
+    <orderEntry type="jdk" jdkName="IntelliJ IDEA IU-183.5912.21" jdkType="IDEA JDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="R User Library" level="project" />
+    <orderEntry type="library" name="R Skeletons" level="application" />
   </component>
 </module>

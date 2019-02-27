@@ -22,7 +22,7 @@ public class ImageUtils {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
 
         try {
-            if(transferable == null || transferable.isDataFlavorSupported(DataFlavor.getTextPlainUnicodeFlavor())) {
+            if(transferable == null || transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                 return null;
             }
 
