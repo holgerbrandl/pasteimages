@@ -9,7 +9,8 @@
 
     <description><![CDATA[
         Paste images into MarkDown documents directly from clipboard<br>
-        Images files are deposited in a configurable directory relative to the markdown document.
+        [LOCAL]Images files are deposited in a configurable directory relative to the markdown document.<br>
+        [QINIU]Images files are uploaded to qiniu.
         ]]></description>
 
     <change-notes><![CDATA[

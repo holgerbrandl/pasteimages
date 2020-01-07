@@ -6,6 +6,7 @@
 .mtj.tmp/
 
 # Package Files #
+*.zip
 *.jar
 *.war
 *.ear

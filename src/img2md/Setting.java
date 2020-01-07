@@ -21,6 +21,7 @@ public class Setting implements Configurable {
     private JTextField qiniuBucketNameField;
     private JTabbedPane saveImgPanel;
     private JLabel imgSaveLocationLabel;
+    private JTextPane imagesFilesAreDepositedTextPane;
     private String imageSaveLocation = "LOCAL";
 
     public Setting() {
@@ -46,7 +47,7 @@ public class Setting implements Configurable {
     @Nls(capitalization = Nls.Capitalization.Title)
     @Override
     public String getDisplayName() {
-        return "PasteImageToMarkdown";
+        return "Paste Images into Markdown";
     }
 
     @Nullable
