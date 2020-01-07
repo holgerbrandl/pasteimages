@@ -1,7 +1,7 @@
 # Created by .ignore support plugin (hsz.mobi)
 ### Java template
 *.class
-
+*.iml
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
@@ -34,7 +34,7 @@ hs_err_pid*
 # Gradle:
 .idea/gradle.xml
 .idea/libraries
-
+.idea
 # Mongo Explorer plugin:
 .idea/mongoSettings.xml
 

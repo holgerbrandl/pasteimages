@@ -1,4 +1,4 @@
-<idea-plugin version="2">
+<idea-plugin>
     <id>com.github.holgerbrandl.pasteimages/</id>
     <name>Paste Images into Markdown</name>
     <version>1.2.4</version>
@@ -6,7 +6,6 @@
 
     <!--see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html-->
     <depends>com.intellij.modules.lang</depends>
-
 
     <description><![CDATA[
         Paste images into MarkDown documents directly from clipboard<br>
@@ -16,11 +15,12 @@
     <change-notes><![CDATA[
         New Features:
         <ul>
+            <li>support qiniu cdn</li>
             <li>Paste handler to use default ctrl-v to paste clipboard images</li>
             <li>Added optional rescaling of pasted images scaleImage</li>
         </ul>
         ]]>
-  </change-notes>
+    </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
     <idea-version since-build="171.0"/>
@@ -28,6 +28,10 @@
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
         <editorActionHandler action="EditorPaste" implementationClass="img2md.PasteImageHandler" order="first"/>
+    </extensions>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable instance="img2md.Setting"/>
     </extensions>
 
     <!--<actions>-->

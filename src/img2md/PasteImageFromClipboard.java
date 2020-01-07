@@ -27,7 +27,12 @@ import java.io.File;
 import java.util.Collections;
 import java.util.UUID;
 
-import static img2md.ImageUtils.*;
+import static img2md.ImageUtils.getImageFromClipboard;
+import static img2md.ImageUtils.makeRoundedCorner;
+import static img2md.ImageUtils.save;
+import static img2md.ImageUtils.scaleImage;
+import static img2md.ImageUtils.toBufferedImage;
+import static img2md.ImageUtils.whiteToTransparent;
 
 public class PasteImageFromClipboard extends AnAction {
 
@@ -37,10 +42,20 @@ public class PasteImageFromClipboard extends AnAction {
     private static final String PI_ROUND_CORNERS = "PI__IMG_ROUND_CORNERS";
     private static final String PI_IMG_SCALE = "PI__IMG_SCALE";
     private static final String PI_LAST_DIR_PATTERN = "PI__LAST_DIR_PATTERN";
-
+    private String imageSaveLocation = "LOCAL";
 
     @Override
     public void actionPerformed(AnActionEvent e) {
+        String imageSaveLocationValue = PropertiesComponent.getInstance().getValue(Constants.IMAGE_SAVE_LOCATION);
+        if (imageSaveLocationValue == null || imageSaveLocationValue.trim().length() == 0) {
+            imageSaveLocation = "LOCAL";
+        } else {
+            imageSaveLocation = imageSaveLocationValue;
+        }
+        if(!"LOCAL".equalsIgnoreCase(imageSaveLocation) && !"QINIU".equalsIgnoreCase(imageSaveLocation)){
+            throw new RuntimeException("not support " + imageSaveLocation.toLowerCase());
+        }
+
         Image imageFromClipboard = getImageFromClipboard();
 
         // deterimine save path for the image
@@ -77,50 +92,52 @@ public class PasteImageFromClipboard extends AnAction {
 
         if (bufferedImage == null) return;
 
-        Dimension dimension = new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight());
-        ImageInsertSettingsPanel insertSettingsPanel = showDialog(curDocument, dimension);
+        if("LOCAL".equalsIgnoreCase(imageSaveLocation)) {
 
-        if (insertSettingsPanel == null) return;
+            Dimension dimension = new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight());
+            ImageInsertSettingsPanel insertSettingsPanel = showDialog(curDocument, dimension);
 
-        String imageName = insertSettingsPanel.getNameInput().getText();
-        boolean whiteAsTransparent = insertSettingsPanel.getWhiteCheckbox().isSelected();
-        boolean roundCorners = insertSettingsPanel.getRoundCheckbox().isSelected();
-        double scalingFactor = ((Integer) insertSettingsPanel.getScaleSpinner().getValue()) * 0.01;
+            if (insertSettingsPanel == null) return;
+
+            String imageName = insertSettingsPanel.getNameInput().getText();
+            boolean whiteAsTransparent = insertSettingsPanel.getWhiteCheckbox().isSelected();
+            boolean roundCorners = insertSettingsPanel.getRoundCheckbox().isSelected();
+            double scalingFactor = ((Integer) insertSettingsPanel.getScaleSpinner().getValue()) * 0.01;
 
 
-        if (whiteAsTransparent) {
-            bufferedImage = toBufferedImage(whiteToTransparent(bufferedImage));
-        }
+            if (whiteAsTransparent) {
+                bufferedImage = toBufferedImage(whiteToTransparent(bufferedImage));
+            }
 //
-        if (roundCorners) {
-            bufferedImage = toBufferedImage(makeRoundedCorner(bufferedImage, 20));
-        }
+            if (roundCorners) {
+                bufferedImage = toBufferedImage(makeRoundedCorner(bufferedImage, 20));
+            }
 
-        if (scalingFactor != 1) {
-            bufferedImage = scaleImage(bufferedImage,
-                    (int) Math.round(bufferedImage.getWidth() * scalingFactor),
-                    (int) Math.round(bufferedImage.getHeight() * scalingFactor));
-        }
+            if (scalingFactor != 1) {
+                bufferedImage = scaleImage(bufferedImage,
+                        (int) Math.round(bufferedImage.getWidth() * scalingFactor),
+                        (int) Math.round(bufferedImage.getHeight() * scalingFactor));
+            }
 
-        // make selectable
+            // make selectable
 //        File imageDir = new File(curDocument.getParent(), ".images");
-        String mdBaseName = curDocument.getName().replace(".md", "").replace(".Rmd", "");
+            String mdBaseName = curDocument.getName().replace(".md", "").replace(".Rmd", "");
 
 //        File imageDir = new File(curDocument.getParent(), "."+ mdBaseName +"_images");
-        String dirPattern = insertSettingsPanel.getDirectoryField().getText();
-        String format = insertSettingsPanel.getFormatBox().getSelectedItem().toString().toLowerCase();
+            String dirPattern = insertSettingsPanel.getDirectoryField().getText();
+            String format = insertSettingsPanel.getFormatBox().getSelectedItem().toString().toLowerCase();
 
 
-        File imageDir = new File(curDocument.getParent(), dirPattern.replace(DOC_BASE_NAME, mdBaseName));
+            File imageDir = new File(curDocument.getParent(), dirPattern.replace(DOC_BASE_NAME, mdBaseName));
 
 
-        if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdirs();
+            if (!imageDir.exists() || !imageDir.isDirectory()) imageDir.mkdirs();
 
 
-        File imageFile = new File(imageDir, imageName + "." + format);
+            File imageFile = new File(imageDir, imageName + "." + format);
 
-        // todo should we silently override the image if it is already present?
-        save(bufferedImage, imageFile, format);
+            // todo should we silently override the image if it is already present?
+            save(bufferedImage, imageFile, format);
 
 //        PropertiesComponent.getInstance()
 
@@ -139,27 +156,53 @@ public class PasteImageFromClipboard extends AnAction {
 //            });
 //        }
 
-        // inject image element current markdown document
-        insertImageElement(ed, curDocument.getParentFile().toPath().relativize(imageFile.toPath()).toFile());
+            // inject image element current markdown document
+            insertImageElement(ed, curDocument.getParentFile().toPath().relativize(imageFile.toPath()).toFile());
 
-        // https://intellij-support.jetbrains.com/hc/en-us/community/posts/206144389-Create-virtual-file-from-file-path
-        VirtualFile fileByPath = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(imageFile);
-        assert fileByPath != null;
+            // https://intellij-support.jetbrains.com/hc/en-us/community/posts/206144389-Create-virtual-file-from-file-path
+            VirtualFile fileByPath = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(imageFile);
+            assert fileByPath != null;
 
-        AbstractVcs usedVcs = ProjectLevelVcsManager.getInstance(ed.getProject()).getVcsFor(fileByPath);
-        if (usedVcs != null && usedVcs.getCheckinEnvironment() != null) {
-            usedVcs.getCheckinEnvironment().scheduleUnversionedFilesForAddition(Collections.singletonList(fileByPath));
+            AbstractVcs usedVcs = ProjectLevelVcsManager.getInstance(ed.getProject()).getVcsFor(fileByPath);
+            if (usedVcs != null && usedVcs.getCheckinEnvironment() != null) {
+                usedVcs.getCheckinEnvironment().scheduleUnversionedFilesForAddition(Collections.singletonList(fileByPath));
+            }
+
+
+            // update directory pattern preferences for file and globally
+            PropertiesComponent pc = PropertiesComponent.getInstance();
+            pc.setValue(PI_LAST_DIR_PATTERN, dirPattern);
+            pc.setValue("PI__DIR_PATTERN_FOR_" + currentFile.getPath(), dirPattern);
+
+            pc.setValue(PI_WHITE_TRANSPARENT, whiteAsTransparent);
+            pc.setValue(PI_ROUND_CORNERS, roundCorners);
+            pc.setValue(PI_IMG_SCALE, (float) scalingFactor, -1);
+        }else if("QINIU".equalsIgnoreCase(imageSaveLocation)){
+            String qiniuImgUrlPrefix = PropertiesComponent.getInstance().getValue(Constants.QINIU_IMG_URL_PREFIX);
+            String qiniuBucketName = PropertiesComponent.getInstance().getValue(Constants.QINIU_BUCKET_NAME);
+            String qiniuAccessKey = PropertiesComponent.getInstance().getValue(Constants.QINIU_ACCESS_KEY);
+            String qiniuSecretKey = PropertiesComponent.getInstance().getValue(Constants.QINIU_SECRET_KEY);
+
+            if (isEmpty(qiniuImgUrlPrefix) ) {
+                throw new RuntimeException("please set IMG_URL_PREFIX in settings");
+            }
+            if(isEmpty(qiniuBucketName) ){
+                throw new RuntimeException("please set BUCKET_NAME in settings");
+            }
+            if( isEmpty(qiniuAccessKey) ){
+                throw new RuntimeException("please set ACCESS_KEY in settings");
+            }
+            if(isEmpty(qiniuSecretKey)){
+                throw new RuntimeException("please set SECRET_KEY in settings");
+            }
+
+            if (!qiniuImgUrlPrefix.endsWith("/")) {
+                qiniuImgUrlPrefix += "/";
+            }
+            QiniuHelper qiniuHelper = new QiniuHelper(qiniuAccessKey, qiniuSecretKey, qiniuBucketName, qiniuImgUrlPrefix, 3);
+            String imgUrl = qiniuHelper.upload(bufferedImage, "markdown/" + System.nanoTime() + ".png");
+            insertImageElement(ed, imgUrl);
         }
-
-
-        // update directory pattern preferences for file and globally
-        PropertiesComponent pc = PropertiesComponent.getInstance();
-        pc.setValue(PI_LAST_DIR_PATTERN, dirPattern);
-        pc.setValue("PI__DIR_PATTERN_FOR_" + currentFile.getPath(), dirPattern);
-
-        pc.setValue(PI_WHITE_TRANSPARENT, whiteAsTransparent);
-        pc.setValue(PI_ROUND_CORNERS, roundCorners);
-        pc.setValue(PI_IMG_SCALE, (float) scalingFactor, -1);
     }
 
 
@@ -239,5 +282,15 @@ public class PasteImageFromClipboard extends AnAction {
         }
 
         return contentPanel;
+    }
+
+    private boolean isEmpty(String s) {
+        return s == null || s.trim().length() == 0;
+    }
+
+    private void insertImageElement(final @NotNull Editor editor, String imageurl) {
+        String picUrl = "![](" + imageurl + ")";
+        Runnable r = () -> EditorModificationUtil.insertStringAtCaret(editor, picUrl);
+        WriteCommandAction.runWriteCommandAction(editor.getProject(), r);
     }
 }
