@@ -34,6 +34,7 @@
                   </grid>
                 </constraints>
                 <properties>
+                  <editable value="false"/>
                   <text value="Images files are deposited in a configurable directory relative to the markdown document."/>
                 </properties>
               </component>
