@@ -149,7 +149,7 @@ public class PasteImageFromClipboard extends AnAction {
 
 
         // update directory pattern preferences for file and globally
-        PropertiesComponent.getInstance().setValue("PI__LAST_DIR_PATTERN", dirPattern);
+//        PropertiesComponent.getInstance().setValue("PI__LAST_DIR_PATTERN", dirPattern);
         PropertiesComponent.getInstance().setValue("PI__DIR_PATTERN_FOR_" + currentFile.getPath(), dirPattern);
     }
 
@@ -194,7 +194,7 @@ public class PasteImageFromClipboard extends AnAction {
 
         PropertiesComponent propComp = PropertiesComponent.getInstance();
         String dirPattern = propComp.getValue("PI__DIR_PATTERN_FOR_" + curDocument.getPath());
-        if (dirPattern == null) dirPattern = propComp.getValue("PI__LAST_DIR_PATTERN");
+//        if (dirPattern == null) dirPattern = propComp.getValue("PI__LAST_DIR_PATTERN");
         if (dirPattern == null) dirPattern = "." + DOC_BASE_NAME + "_images";
 
 

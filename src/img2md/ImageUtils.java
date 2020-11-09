@@ -82,7 +82,8 @@ public class ImageUtils {
         try {
             ImageIO.write(image, format, file);  // ignore returned boolean
         } catch (Throwable e) {
-            System.out.println("Write error for " + file.getPath() + ": " + e.getMessage());
+            throw new RuntimeException("Write error for " + file.getPath(), e);
+//            System.out.println("Write error for " + file.getPath() + ": " + e.getMessage());
         }
     }
 
@@ -108,7 +109,7 @@ public class ImageUtils {
                     continue;
                 }
 
-                if (i > 0) System.err.println("");
+                if (i > 0) System.err.println();
 
                 return read;
             }
@@ -205,7 +206,7 @@ public class ImageUtils {
         ImageFilter filter = new RGBImageFilter() {
 
             // the color we are looking for... Alpha bits are set to opaque
-            public int markerRGB = Color.WHITE.getRGB() | 0xFF000000;
+            public final int markerRGB = Color.WHITE.getRGB() | 0xFF000000;
 
 
             public final int filterRGB(int x, int y, int rgb) {
