@@ -33,6 +33,10 @@ public class PasteImageFromClipboard extends AnAction {
 
 
     private static final String DOC_BASE_NAME = "{document_name}";
+    private static final String PI_WHITE_TRANSPARENT = "PI_WHITE_TRANSPARENT";
+    private static final String PI_ROUND_CORNERS = "PI__IMG_ROUND_CORNERS";
+    private static final String PI_IMG_SCALE = "PI__IMG_SCALE";
+    private static final String PI_LAST_DIR_PATTERN = "PI__LAST_DIR_PATTERN";
 
 
     @Override
@@ -149,13 +153,19 @@ public class PasteImageFromClipboard extends AnAction {
 
 
         // update directory pattern preferences for file and globally
-//        PropertiesComponent.getInstance().setValue("PI__LAST_DIR_PATTERN", dirPattern);
-        PropertiesComponent.getInstance().setValue("PI__DIR_PATTERN_FOR_" + currentFile.getPath(), dirPattern);
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+//        pc.setValue(PI_LAST_DIR_PATTERN, dirPattern);
+        pc.setValue("PI__DIR_PATTERN_FOR_" + currentFile.getPath(), dirPattern);
+
+        pc.setValue(PI_WHITE_TRANSPARENT, whiteAsTransparent);
+        pc.setValue(PI_ROUND_CORNERS, roundCorners);
+        pc.setValue(PI_IMG_SCALE, (float) scalingFactor, -1);
     }
 
 
     private void insertImageElement(final @NotNull Editor editor, File imageFile) {
-        Runnable r = () -> EditorModificationUtil.insertStringAtCaret(editor, "![](" + imageFile.toString() + ")");
+        String relImagePath = imageFile.toString().replace('\\', '/');
+        Runnable r = () -> EditorModificationUtil.insertStringAtCaret(editor, "![](" + relImagePath + ")");
 
         WriteCommandAction.runWriteCommandAction(editor.getProject(), r);
     }
@@ -171,12 +181,12 @@ public class PasteImageFromClipboard extends AnAction {
         ChangeListener listener = new ChangeListener() {
             @Override
             public void stateChanged(ChangeEvent e) {
-                double scalingFactor = (Integer) contentPanel.getScaleSpinner().getValue() * 0.1;
+                double scalingFactor = (Integer) contentPanel.getScaleSpinner().getValue() * 0.01;
 
                 JLabel targetSizeLabel = contentPanel.getTargetSizeLabel();
 
-                if (scalingFactor == 100) {
-                    targetSizeLabel.setText(imgDim.getWidth() + " x " + imgDim.getHeight());
+                if (Math.abs(1.0- scalingFactor) <1E-5) {
+                    targetSizeLabel.setText((int)imgDim.getWidth() + " x " + (int)imgDim.getHeight());
 
                 } else {
                     long newWidth = Math.round(imgDim.getWidth() * scalingFactor);
@@ -202,6 +212,16 @@ public class PasteImageFromClipboard extends AnAction {
 
 
         contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0, 8));
+
+        //  Load and set last used Image Properties
+        boolean whiteAsTransparent = pc.getBoolean(PI_WHITE_TRANSPARENT, false);
+        boolean roundCorners=  pc.getBoolean(PI_ROUND_CORNERS, false);
+        float scalingFactor = pc.getFloat(PI_IMG_SCALE, 1.0f);
+
+        contentPanel.getScaleSpinner().setValue(Math.round(scalingFactor*100));
+        contentPanel.getWhiteCheckbox().setSelected(whiteAsTransparent);
+        contentPanel.getRoundCheckbox().setSelected(roundCorners);
+
         builder.setCenterPanel(contentPanel);
         builder.setDimensionServiceKey("GrepConsoleSound");
         builder.setTitle("Paste Image Settings");

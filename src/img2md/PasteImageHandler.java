@@ -84,7 +84,7 @@ public class PasteImageHandler extends EditorActionHandler implements EditorText
         }
 
         if (myOriginalHandler != null) {
-            myOriginalHandler.execute(editor, caret, dataContext);
+            myOriginalHandler.execute(editor, null, dataContext);
         }
     }
 }
