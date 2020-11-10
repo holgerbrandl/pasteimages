@@ -2,8 +2,10 @@ Paste Image To Markdown
 =======================
 
 
- Paste images directly from clipboard into Markdown Documents in Intellij. Images files are deposited in a configurable directory relative to the markdown.
 
+<!-- Plugin description -->
+ Paste images directly from clipboard into Markdown Documents in Intellij. Images files are deposited in a configurable directory relative to the markdown.
+<!-- Plugin description end -->
 
 ## Installation
 
