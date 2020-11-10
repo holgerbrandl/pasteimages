@@ -214,6 +214,8 @@ public class PasteImageFromClipboard extends AnAction {
         contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0, 8));
 
         //  Load and set last used Image Properties
+        PropertiesComponent pc = PropertiesComponent.getInstance();
+
         boolean whiteAsTransparent = pc.getBoolean(PI_WHITE_TRANSPARENT, false);
         boolean roundCorners=  pc.getBoolean(PI_ROUND_CORNERS, false);
         float scalingFactor = pc.getFloat(PI_IMG_SCALE, 1.0f);
