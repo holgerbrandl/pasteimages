@@ -206,7 +206,9 @@ public class PasteImageFromClipboard extends AnAction {
 
         if (dirPattern == null) dirPattern = "." + DOC_BASE_NAME + "_images";
 
+
         contentPanel.getDirectoryField().setText(dirPattern);
+
 
         contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0, 8));
 
