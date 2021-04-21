@@ -23,7 +23,7 @@
   </change-notes>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-    <idea-version since-build="171.0"/>
+    <idea-version since-build="203"/>
 
     <extensions defaultExtensionNs="com.intellij">
         <!-- Add your extensions here -->
