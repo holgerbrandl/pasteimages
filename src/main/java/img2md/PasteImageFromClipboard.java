@@ -4,6 +4,7 @@ import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
@@ -148,7 +149,9 @@ public class PasteImageFromClipboard extends AnAction {
 
         AbstractVcs usedVcs = ProjectLevelVcsManager.getInstance(ed.getProject()).getVcsFor(fileByPath);
         if (usedVcs != null && usedVcs.getCheckinEnvironment() != null) {
-            usedVcs.getCheckinEnvironment().scheduleUnversionedFilesForAddition(Collections.singletonList(fileByPath));
+            ApplicationManager.getApplication().executeOnPooledThread(() -> {
+                usedVcs.getCheckinEnvironment().scheduleUnversionedFilesForAddition(Collections.singletonList(fileByPath));
+            });
         }
 
 
@@ -184,8 +187,8 @@ public class PasteImageFromClipboard extends AnAction {
 
                 JLabel targetSizeLabel = contentPanel.getTargetSizeLabel();
 
-                if (Math.abs(1.0- scalingFactor) <1E-5) {
-                    targetSizeLabel.setText((int)imgDim.getWidth() + " x " + (int)imgDim.getHeight());
+                if (Math.abs(1.0 - scalingFactor) < 1E-5) {
+                    targetSizeLabel.setText((int) imgDim.getWidth() + " x " + (int) imgDim.getHeight());
 
                 } else {
                     long newWidth = Math.round(imgDim.getWidth() * scalingFactor);
@@ -214,10 +217,10 @@ public class PasteImageFromClipboard extends AnAction {
 
         //  Load and set last used Image Properties
         boolean whiteAsTransparent = pc.getBoolean(PI_WHITE_TRANSPARENT, false);
-        boolean roundCorners=  pc.getBoolean(PI_ROUND_CORNERS, false);
+        boolean roundCorners = pc.getBoolean(PI_ROUND_CORNERS, false);
         float scalingFactor = pc.getFloat(PI_IMG_SCALE, 1.0f);
 
-        contentPanel.getScaleSpinner().setValue(Math.round(scalingFactor*100));
+        contentPanel.getScaleSpinner().setValue(Math.round(scalingFactor * 100));
         contentPanel.getWhiteCheckbox().setSelected(whiteAsTransparent);
         contentPanel.getRoundCheckbox().setSelected(roundCorners);
 
