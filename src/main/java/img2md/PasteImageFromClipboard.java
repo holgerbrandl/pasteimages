@@ -108,7 +108,8 @@ public class PasteImageFromClipboard extends AnAction {
         String mdBaseName = curDocument.getName().replace(".md", "").replace(".Rmd", "");
 
 //        File imageDir = new File(curDocument.getParent(), "."+ mdBaseName +"_images");
-        String dirPattern = insertSettingsPanel.getDirectoryField().getText();
+        String dirPattern = insertSettingsPanel.getDirectoryField().getSelectedItem().toString();
+        DirCache.addIfNotExist(dirPattern);
         String format = insertSettingsPanel.getFormatBox().getSelectedItem().toString().toLowerCase();
 
 
@@ -210,7 +211,7 @@ public class PasteImageFromClipboard extends AnAction {
         if (dirPattern == null) dirPattern = "." + DOC_BASE_NAME + "_images";
 
 
-        contentPanel.getDirectoryField().setText(dirPattern);
+//        contentPanel.getDirectoryField().setText(dirPattern);
 
 
         contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0, 8));

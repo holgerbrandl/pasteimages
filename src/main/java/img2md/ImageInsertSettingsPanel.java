@@ -42,7 +42,7 @@ public class ImageInsertSettingsPanel extends JPanel {
     }
 
 
-    public JTextField getDirectoryField() {
+    public JComboBox<String> getDirectoryField() {
         return directoryField;
     }
 
@@ -58,7 +58,7 @@ public class ImageInsertSettingsPanel extends JPanel {
         label1 = new JLabel();
         nameInput = new JTextField();
         label3 = new JLabel();
-        directoryField = new JTextField();
+        directoryField = new JComboBox<>();
         label5 = new JLabel();
         formatBox = new JComboBox<>();
         panel4 = new JPanel();
@@ -98,6 +98,8 @@ public class ImageInsertSettingsPanel extends JPanel {
 
             //---- label3 ----
             label3.setText("Directory Name");
+            directoryField.setModel(new DefaultComboBoxModel<>(DirCache.get()));
+            directoryField.setEditable(true);
             panel1.add(label3, new GridBagConstraints(0, 1, 1, 1, 0.0, 0.0,
                     GridBagConstraints.CENTER, GridBagConstraints.HORIZONTAL,
                     new Insets(0, 0, 0, 0), 0, 0));
@@ -199,7 +201,7 @@ public class ImageInsertSettingsPanel extends JPanel {
     private JLabel label1;
     private JTextField nameInput;
     private JLabel label3;
-    private JTextField directoryField;
+    private JComboBox<String> directoryField;
     private JLabel label5;
     private JComboBox<String> formatBox;
     private JPanel panel4;
