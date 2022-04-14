@@ -37,6 +37,7 @@ import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.util.Producer;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
@@ -57,15 +58,15 @@ public class PasteImageHandler extends EditorActionHandler implements EditorText
     }
 
 
-    @Override
-    public void execute(Editor editor, DataContext dataContext, Producer<Transferable> producer) {
-        Caret caret = editor.getCaretModel().getPrimaryCaret();
-        doExecute(editor, caret, dataContext);
-    }
+//    @Override
+//    public void execute(Editor editor, DataContext dataContext, Producer<Transferable> producer) {
+//        Caret caret = editor.getCaretModel().getPrimaryCaret();
+//        doExecute(editor, caret, dataContext);
+//    }
 
 
     @Override
-    public void doExecute(@NotNull final Editor editor, Caret caret, final DataContext dataContext) {
+    public void execute(Editor editor, DataContext dataContext, @Nullable Producer<? extends Transferable> producer) {
         if (editor instanceof EditorEx) {
             VirtualFile virtualFile = ((EditorEx) editor).getVirtualFile();
             if (virtualFile != null) {
@@ -73,7 +74,7 @@ public class PasteImageHandler extends EditorActionHandler implements EditorText
                 if ("Markdown".equals(fileType.getName())) {
                     Image imageFromClipboard = ImageUtils.getImageFromClipboard();
                     if (imageFromClipboard != null) {
-                        assert caret == null : "Invocation of 'paste' operation for specific caret is not supported";
+//                        assert caret == null : "Invocation of 'paste' operation for specific caret is not supported";
                         PasteImageFromClipboard action = new PasteImageFromClipboard();
                         AnActionEvent event = createAnEvent(action, dataContext);
                         action.actionPerformed(event);
