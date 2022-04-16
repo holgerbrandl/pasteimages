@@ -42,7 +42,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.awt.datatransfer.Transferable;
 
-public class PasteImageHandler extends EditorActionHandler implements EditorTextInsertHandler {
+public class PasteImageHandler extends EditorActionHandler {
     private static final Logger LOG = Logger.getInstance("img2md.PasteHandler");
     private final EditorActionHandler myOriginalHandler;
 
@@ -57,8 +57,11 @@ public class PasteImageHandler extends EditorActionHandler implements EditorText
         return new AnActionEvent(null, context, ActionPlaces.UNKNOWN, presentation, ActionManager.getInstance(), 0);
     }
 
-
-//    @Override
+    @Override
+    public void execute(@NotNull Editor editor, @Nullable DataContext dataContext) {
+        super.execute(editor, dataContext);
+    }
+    //    @Override
 //    public void execute(Editor editor, DataContext dataContext, Producer<Transferable> producer) {
 //        Caret caret = editor.getCaretModel().getPrimaryCaret();
 //        doExecute(editor, caret, dataContext);
@@ -66,7 +69,7 @@ public class PasteImageHandler extends EditorActionHandler implements EditorText
 
 
     @Override
-    public void execute(Editor editor, DataContext dataContext, @Nullable Producer<? extends Transferable> producer) {
+    protected void doExecute(@NotNull Editor editor, @Nullable Caret caret, DataContext dataContext) {
         if (editor instanceof EditorEx) {
             VirtualFile virtualFile = ((EditorEx) editor).getVirtualFile();
             if (virtualFile != null) {
