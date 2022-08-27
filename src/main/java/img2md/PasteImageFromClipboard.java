@@ -147,12 +147,15 @@ public class PasteImageFromClipboard extends AnAction {
         VirtualFile fileByPath = LocalFileSystem.getInstance().refreshAndFindFileByIoFile(imageFile);
         assert fileByPath != null;
 
-        AbstractVcs usedVcs = ProjectLevelVcsManager.getInstance(ed.getProject()).getVcsFor(fileByPath);
-        if (usedVcs != null && usedVcs.getCheckinEnvironment() != null) {
-            ApplicationManager.getApplication().executeOnPooledThread(() -> {
-                usedVcs.getCheckinEnvironment().scheduleUnversionedFilesForAddition(Collections.singletonList(fileByPath));
-            });
-        }
+
+        ApplicationManager.getApplication().invokeLater(() -> {
+            AbstractVcs usedVcs = ProjectLevelVcsManager.getInstance(ed.getProject()).getVcsFor(fileByPath);
+            if (usedVcs != null && usedVcs.getCheckinEnvironment() != null) {
+                ApplicationManager.getApplication().executeOnPooledThread(() -> {
+                    usedVcs.getCheckinEnvironment().scheduleUnversionedFilesForAddition(Collections.singletonList(fileByPath));
+                });
+            }
+        });
 
 
         // update directory pattern preferences for file and globally
