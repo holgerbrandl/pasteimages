@@ -14,28 +14,44 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.List;
 
 
 public class ImageUtils {
-
-    public static Image getImageFromClipboard() {
+    public static ImageWithInfo getImageFromClipboard() {
         Transferable transferable = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+        return getImageFromClipboard(transferable);
+    }
 
+    public static ImageWithInfo getImageFromClipboard(final Transferable transferable) {
         try {
-            if(transferable == null || transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            if (transferable == null) {
                 return null;
+            }
+
+            if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                List<File> files = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
+                if (files.size() > 0) {
+                    File file = files.get(0);
+                    return new ImageWithInfo(ImageIO.read(file), file.getName().split("\\.")[0]);
+                }
             }
 
             if (transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
-                return (Image) transferable.getTransferData(DataFlavor.imageFlavor);
-            } else {
+                return new ImageWithInfo((Image) transferable.getTransferData(DataFlavor.imageFlavor), null);
+            }
+
+            if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                String string = (String)transferable.getTransferData(DataFlavor.stringFlavor);
+                // @TODO: Check the string is a URL?
                 return null;
             }
 
+            return null;
         } catch (UnsupportedFlavorException e) {
             e.printStackTrace();
         } catch (IOException e) {
-            throw new RuntimeException();
+            throw new RuntimeException(e);
         }
 
         return null;

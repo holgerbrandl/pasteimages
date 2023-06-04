@@ -42,7 +42,7 @@ public class PasteImageFromClipboard extends AnAction {
 
     @Override
     public void actionPerformed(AnActionEvent e) {
-        Image imageFromClipboard = getImageFromClipboard();
+        ImageWithInfo imageFromClipboard = getImageFromClipboard();
 
         // deterimine save path for the image
         Editor ed = e.getData(PlatformDataKeys.EDITOR);
@@ -74,12 +74,12 @@ public class PasteImageFromClipboard extends AnAction {
 
 
         // add option to rescale image on the fly
-        BufferedImage bufferedImage = toBufferedImage(imageFromClipboard);
+        BufferedImage bufferedImage = toBufferedImage(imageFromClipboard.image);
 
         if (bufferedImage == null) return;
 
         Dimension dimension = new Dimension(bufferedImage.getWidth(), bufferedImage.getHeight());
-        ImageInsertSettingsPanel insertSettingsPanel = showDialog(curDocument, dimension);
+        ImageInsertSettingsPanel insertSettingsPanel = showDialog(curDocument, dimension, imageFromClipboard.name);
 
         if (insertSettingsPanel == null) return;
 
@@ -178,7 +178,7 @@ public class PasteImageFromClipboard extends AnAction {
 
     // for more examples see
 //    http://www.programcreek.com/java-api-examples/index.php?api=com.intellij.openapi.ui.DialogWrapper
-    private static ImageInsertSettingsPanel showDialog(File curDocument, Dimension imgDim) {
+    private static ImageInsertSettingsPanel showDialog(File curDocument, Dimension imgDim, String proposedName) {
         DialogBuilder builder = new DialogBuilder();
         ImageInsertSettingsPanel contentPanel = new ImageInsertSettingsPanel();
 
@@ -216,7 +216,11 @@ public class PasteImageFromClipboard extends AnAction {
         contentPanel.getDirectoryField().setText(dirPattern);
 
 
-        contentPanel.getNameInput().setText(UUID.randomUUID().toString().substring(0, 8));
+        contentPanel.getNameInput().setText(
+                (proposedName != null)
+                    ? proposedName
+                    : UUID.randomUUID().toString().substring(0, 8)
+        );
 
         //  Load and set last used Image Properties
         boolean whiteAsTransparent = pc.getBoolean(PI_WHITE_TRANSPARENT, false);
