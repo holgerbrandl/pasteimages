@@ -3,6 +3,8 @@
     <name>Paste Images into Markdown</name>
     <version>1.2.6</version>
     <vendor email="holgerbrandl@gmail.com" url="https://github.com/holgerbrandl/pasteimages"/>
+    <vendor>Holger Brandl</vendor>
+
 
     <!--see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html-->
     <depends>com.intellij.modules.lang</depends>
