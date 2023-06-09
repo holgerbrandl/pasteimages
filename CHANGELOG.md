@@ -1,6 +1,8 @@
 # Changes
 
-## [Unreleased]
+## [1.3.0]
+
+Fixed NPE when using 2023.1
 
 ## [1.2.11]
 - Updated Dependencies
