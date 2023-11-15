@@ -29,9 +29,16 @@ public class ImageUtils {
                 return null;
             }
 
+            if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+//                String string = (String) transferable.getTransferData(DataFlavor.stringFlavor);
+                // @TODO: Check the string is a URL?
+                return null;
+            }
+
             if (transferable.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+                @SuppressWarnings("unchecked")
                 List<File> files = (List<File>) transferable.getTransferData(DataFlavor.javaFileListFlavor);
-                if (files.size() > 0) {
+                if (!files.isEmpty()) {
                     File file = files.get(0);
                     return new ImageWithInfo(ImageIO.read(file), file.getName().split("\\.")[0]);
                 }
@@ -39,12 +46,6 @@ public class ImageUtils {
 
             if (transferable.isDataFlavorSupported(DataFlavor.imageFlavor)) {
                 return new ImageWithInfo((Image) transferable.getTransferData(DataFlavor.imageFlavor), null);
-            }
-
-            if (transferable.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                String string = (String)transferable.getTransferData(DataFlavor.stringFlavor);
-                // @TODO: Check the string is a URL?
-                return null;
             }
 
             return null;

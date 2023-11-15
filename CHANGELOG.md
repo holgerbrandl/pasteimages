@@ -1,5 +1,9 @@
 # Changes
 
+## [1.3.1]
+
+Fixed compat with 2023.2
+
 ## [1.3.0]
 
 Fixed NPE when using 2023.1
