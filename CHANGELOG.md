@@ -1,5 +1,9 @@
 # Changes
 
+## [1.3.2]
+
+Fixed compat with 2023.
+
 ## [1.3.1]
 
 Fixed compat with 2023.2
