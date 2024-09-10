@@ -1,5 +1,9 @@
 # Changes
 
+## [1.3.4]
+
+Fixed compat with 2024.2
+
 ## [1.3.3]
 
 Fixed compat with 2024.1
