@@ -105,7 +105,7 @@ public class PasteImageFromClipboard extends AnAction {
 
         // make selectable
 //        File imageDir = new File(curDocument.getParent(), ".images");
-        String mdBaseName = curDocument.getName().replace(".md", "").replace(".Rmd", "");
+        String mdBaseName = curDocument.getName().replace(".md", "").replace(".Rmd", "").replace(".mdx", "");
 
 //        File imageDir = new File(curDocument.getParent(), "."+ mdBaseName +"_images");
         String dirPattern = insertSettingsPanel.getDirectoryField().getSelectedItem().toString();
