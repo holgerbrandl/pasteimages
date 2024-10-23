@@ -74,7 +74,8 @@ public class PasteImageHandler extends EditorActionHandler {
             VirtualFile virtualFile = ((EditorEx) editor).getVirtualFile();
             if (virtualFile != null) {
                 FileType fileType = virtualFile.getFileType();
-                if ("Markdown".equals(fileType.getName())) {
+                // File Formats that this plugin supports
+                if ("Markdown".equals(fileType.getName()) || "MDX".equals(fileType.getName()))  {
                     ImageWithInfo imageFromClipboard1 = ImageUtils.getImageFromClipboard();
                     if(imageFromClipboard1!=null) {
 
